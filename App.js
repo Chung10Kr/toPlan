@@ -94,8 +94,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    //AsyncStorage.clear()
-
+    
     const {toPlans , loaded , toResults} = this.state;
     
     var d = new Date() ;
@@ -105,9 +104,8 @@ export default class App extends React.Component {
     const today = this._getCurTime()
     
     //9시가 넘고 같은 날짜가 존재 할떄
-    if(_t >= 21){
+    if(_t >= 20){
       Object.values(toResults).map(result=>{
-        
         if( today.toString()  ==  moment(result.createedAt).format('YYYY-MM-DD').toString()  ){
           todayCheck=true;
         };

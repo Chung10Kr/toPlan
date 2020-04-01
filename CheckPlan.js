@@ -37,13 +37,19 @@ export default class CheckPlan extends React.Component {
 
     return(
       <View style={styles.container}>
-          <StatusBar barStyle="light-content"/>
-          <Text 
-            style={styles.title}>{_toPlans}</Text>
-          <Calendar
-            style={styles.Calendar}
-            _toResults={_toResults}
-          />
+          <View style={styles.header}>
+            <Text style={styles.title}>{_toPlans}</Text>
+          </View>
+          <View style={styles.body}>
+            <Calendar
+              style={styles.Calendar}
+              _toResults={_toResults}
+            />
+          </View>
+          <View style={styles.bottom}>
+              
+          </View>
+          
       </View>
     );
 
@@ -56,17 +62,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#F23657',
     alignItems: 'center',
   },
-  title:{
-    
+  header:{
+    flex:2
+  },
+  body:{
+    flex:6
+  },
+  bottom:{
+    flex:1
+  },
+   title:{
     color:"white",
     fontSize:30,
+    fontWeight : "600",
     marginTop:50,
     fontWeight:"200",
     marginBottom:30,
-    fontWeight : "600"
   },
   Calendar:{
-    
+    flex:10,
+  },
+  dumy:{
+    flex:1
   }
   
 });

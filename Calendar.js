@@ -30,27 +30,69 @@ export default class Calendar extends Component {
   render() {
     const {_toResults} = this.props;
     
-    let today = moment();
-    let customDatesStyles = [];
-    
-    Object.values(_toResults).map(result=>{
-            
-      customDatesStyles.push({
-        date: result.createedAt,
-        // Random colors
-        style: {backgroundColor: '#'+('#00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)},
-        textStyle: {color: 'black'}, // sets the font color
-        containerStyle: [], // extra styling for day container
-      });
-    });
-      
+          
     return (
-      <CalendarPicker
-        todayTextStyle={{fontWeight: 'bold'}}
-        todayBackgroundColor={'transparent'}
-        customDatesStyles={customDatesStyles}
-        minDate={today}
-      />
+      <View style={styles.container}>
+        <View style={styles.row}>
+            <View style={[styles.sub_ , styles.lc_]}><Text>👈👈👈</Text></View>
+            <View style={styles.main_}><Text style={styles.sun}>April 2020</Text></View>
+            <View style={[styles.sub_ , styles.rc_]}><Text>👉👉👉</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>일</Text></View>
+            <View style={styles.box}><Text>월</Text></View>
+            <View style={styles.box}><Text>화</Text></View>
+            <View style={styles.box}><Text>수</Text></View>
+            <View style={styles.box}><Text>목</Text></View>
+            <View style={styles.box}><Text>금</Text></View>
+            <View style={styles.box}><Text style={styles.sat}>토</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>1</Text></View>
+            <View style={styles.box}><Text>2</Text></View>
+            <View style={styles.box}><Text>3</Text></View>
+            <View style={styles.box}><Text>4</Text></View>
+            <View style={styles.box}><Text>5</Text></View>
+            <View style={styles.box}><Text>6</Text></View>
+            <View style={styles.box}><Text style={styles.sat}>7</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>8</Text></View>
+            <View style={styles.box}><Text>9</Text></View>
+            <View style={styles.box}><Text>10</Text></View>
+            <View style={styles.box}><Text>11</Text></View>
+            <View style={styles.box}><Text>12</Text></View>
+            <View style={styles.box}><Text>13</Text></View>
+            <View style={styles.box}><Text style={styles.sat}>14</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>15</Text></View>
+            <View style={styles.box}><Text>16</Text></View>
+            <View style={styles.box}><Text>17</Text></View>
+            <View style={styles.box}><Text>18</Text></View>
+            <View style={styles.box}><Text>19</Text></View>
+            <View style={styles.box}><Text>20</Text></View>
+            <View style={styles.box}><Text style={styles.sat}>21</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>22</Text></View>
+            <View style={styles.box}><Text>23</Text></View>
+            <View style={styles.box}><Text>24</Text></View>
+            <View style={styles.box}><Text>25</Text></View>
+            <View style={styles.box}><Text>26</Text></View>
+            <View style={styles.box}><Text>27</Text></View>
+            <View style={styles.box}><Text style={styles.sat}>28</Text></View>
+        </View>
+        <View style={styles.row}>
+            <View style={styles.box}><Text style={styles.sun}>29</Text></View>
+            <View style={styles.box}><Text>30</Text></View>
+            <View style={styles.box}><Text>31</Text></View>
+            <View style={styles.box}><Text></Text></View>
+            <View style={styles.box}><Text></Text></View>
+            <View style={styles.box}><Text></Text></View>
+            <View style={styles.box}><Text style={styles.sat}></Text></View>
+        </View>
+      </View>
     );
 }
 
@@ -58,11 +100,43 @@ export default class Calendar extends Component {
  
 const styles = StyleSheet.create({
   container: {
+    marginRight:5,
+    marginLeft:5,
+    paddingTop:30,
+    paddingRight:5,
+    paddingLeft:5,
     flex: 1,
     backgroundColor: '#FFFFFF',
-    marginTop: 100,
+    borderRadius : 20,
+    flexDirection:'column'
   },
-  perpect:{
+  row:{
+    flex:1,
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  box:{
+    width:'14%',
+    alignItems:'center'
+  },
+  sun:{
+    color:'red'
+  },
+  sat:{
     color:'blue'
+  },
+  main_:{
+    width:'40%',
+    alignItems:'center'
+  },
+  sub_:{
+    width:'30%'
+  },
+  lc_:{
+    alignItems:'flex-start'
+  },
+  rc_:{
+    alignItems:'flex-end'
   }
 });
