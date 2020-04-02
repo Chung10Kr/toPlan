@@ -13,12 +13,12 @@ import {
 import { render } from 'react-dom';
 import { AppLoading } from "expo"
 import uuidv1 from "uuid/v1";
-import moment from 'moment'
+import moment ,  { Moment as MomentTypes }  from "moment"; 
 
 import AddPlan from "./AddPlan";
 import AddResult from "./AddResult";
 import CheckPlan from "./CheckPlan";
-import Calendar from "./Calendar";
+
 
 
 
@@ -61,11 +61,14 @@ export default class App extends React.Component {
 
  _addToResults=(newResult)=>{
     const {toPlans} = this.state;
+    const today = moment();
+    
     if(toPlans != ""){
       this.setState(prevState=>{
         const ID = uuidv1();
+        
         const newToPlanObject ={
-          [ID]:{
+          [today.clone().format('YYYY-MM-DD')]:{
             id:ID,
             result:newResult,
             toPlans:toPlans,
@@ -94,7 +97,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    
+    //AsyncStorage.clear()
+
     const {toPlans , loaded , toResults} = this.state;
     
     var d = new Date() ;

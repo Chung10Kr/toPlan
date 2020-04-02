@@ -2,41 +2,92 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
+  ImageBackground
 } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import PropTypes from "prop-types";
-import moment from "moment"; 
+import moment ,  { Moment as MomentTypes }  from "moment"; 
+
 
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedStartDate: null,
+      today : moment()
     };
-    this.onDateChange = this.onDateChange.bind(this);
   }
   static propTypes = {
     _toResults: PropTypes.object.isRequired
   }
   onDateChange(date) {
     this.setState({
-      selectedStartDate: date,
+      
     });
   }
-
- 
- 
+  
   render() {
-    const {_toResults} = this.props;
+
+    function generate(today , _toResults){
+        
+    const startWeek = today.clone().startOf('month').week();
+    const endWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
     
-          
+    let calendar = [];
+    
+      for (let week = startWeek; week <= endWeek; week++) {
+        
+        calendar.push(
+          <View style={styles.row} key={week} >
+            {
+              Array(7).fill(0).map((n, i) => {
+                let current = today.clone().week(week).startOf('week').add(n + i, 'day')
+                let imgNm = null; 
+                if( _toResults.hasOwnProperty( current.format('YYYY-MM-DD') )  ){
+                  imgNm = 'icon'+_toResults[ current.format('YYYY-MM-DD') ].result ;
+                };
+                console.log(imgNm)
+                 
+                return (
+                  <View style={styles.box} key={ week+'-'+i} >
+                    <Text
+                      style={[
+                        (i === 0) && { color:'red' },
+                        (i === 6) && { color:'blue' },
+                      ]}
+                    >
+                      {current.format('D')}
+                      {/* <ImageBackground
+                        style={{ width: "100%", height: "100%" }}
+                        source={require("./assets/icon1.png")}
+                        resizeMode="cover"
+                        >
+                      </ImageBackground> */}
+                    </Text>
+                  </View>
+                )
+              })
+            }
+          </View>
+        );
+      };
+    return calendar;
+    };
+
+    const {_toResults} = this.props;
+    const {today} = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.row}>
-            <View style={[styles.sub_ , styles.lc_]}><Text>👈👈👈</Text></View>
-            <View style={styles.main_}><Text style={styles.sun}>April 2020</Text></View>
-            <View style={[styles.sub_ , styles.rc_]}><Text>👉👉👉</Text></View>
+            <TouchableOpacity style={styles.sub_} onPress={()=> this.setState({today:today.clone().subtract(1, 'month')})} >
+              <View style={styles.lc_}><Text>👈👈👈</Text></View>
+            </TouchableOpacity>
+            <View style={styles.main_}><Text style={styles.Title}>{today.format('MMMM YYYY')}</Text></View>
+            <TouchableOpacity style={styles.sub_} onPress={()=> this.setState({today:today.clone().add(1, 'month')})} >
+              <View style={styles.rc_}><Text>👉👉👉</Text></View>  
+            </TouchableOpacity>
         </View>
         <View style={styles.row}>
             <View style={styles.box}><Text style={styles.sun}>일</Text></View>
@@ -47,51 +98,7 @@ export default class Calendar extends Component {
             <View style={styles.box}><Text>금</Text></View>
             <View style={styles.box}><Text style={styles.sat}>토</Text></View>
         </View>
-        <View style={styles.row}>
-            <View style={styles.box}><Text style={styles.sun}>1</Text></View>
-            <View style={styles.box}><Text>2</Text></View>
-            <View style={styles.box}><Text>3</Text></View>
-            <View style={styles.box}><Text>4</Text></View>
-            <View style={styles.box}><Text>5</Text></View>
-            <View style={styles.box}><Text>6</Text></View>
-            <View style={styles.box}><Text style={styles.sat}>7</Text></View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.box}><Text style={styles.sun}>8</Text></View>
-            <View style={styles.box}><Text>9</Text></View>
-            <View style={styles.box}><Text>10</Text></View>
-            <View style={styles.box}><Text>11</Text></View>
-            <View style={styles.box}><Text>12</Text></View>
-            <View style={styles.box}><Text>13</Text></View>
-            <View style={styles.box}><Text style={styles.sat}>14</Text></View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.box}><Text style={styles.sun}>15</Text></View>
-            <View style={styles.box}><Text>16</Text></View>
-            <View style={styles.box}><Text>17</Text></View>
-            <View style={styles.box}><Text>18</Text></View>
-            <View style={styles.box}><Text>19</Text></View>
-            <View style={styles.box}><Text>20</Text></View>
-            <View style={styles.box}><Text style={styles.sat}>21</Text></View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.box}><Text style={styles.sun}>22</Text></View>
-            <View style={styles.box}><Text>23</Text></View>
-            <View style={styles.box}><Text>24</Text></View>
-            <View style={styles.box}><Text>25</Text></View>
-            <View style={styles.box}><Text>26</Text></View>
-            <View style={styles.box}><Text>27</Text></View>
-            <View style={styles.box}><Text style={styles.sat}>28</Text></View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.box}><Text style={styles.sun}>29</Text></View>
-            <View style={styles.box}><Text>30</Text></View>
-            <View style={styles.box}><Text>31</Text></View>
-            <View style={styles.box}><Text></Text></View>
-            <View style={styles.box}><Text></Text></View>
-            <View style={styles.box}><Text></Text></View>
-            <View style={styles.box}><Text style={styles.sat}></Text></View>
-        </View>
+        {generate(today , _toResults )}
       </View>
     );
 }
@@ -120,12 +127,6 @@ const styles = StyleSheet.create({
     width:'14%',
     alignItems:'center'
   },
-  sun:{
-    color:'red'
-  },
-  sat:{
-    color:'blue'
-  },
   main_:{
     width:'40%',
     alignItems:'center'
@@ -138,5 +139,14 @@ const styles = StyleSheet.create({
   },
   rc_:{
     alignItems:'flex-end'
+  },
+  sun:{
+    color:'red'
+  },
+  sat:{
+     color:'blue'
+  },
+  Title:{
+    color:'gray',
   }
 });
