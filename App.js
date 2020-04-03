@@ -97,8 +97,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    //AsyncStorage.clear()
-
+    
     const {toPlans , loaded , toResults} = this.state;
     
     var d = new Date() ;
