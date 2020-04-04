@@ -17,8 +17,7 @@ import moment ,  { Moment as MomentTypes }  from "moment";
 
 import AddPlan from "./AddPlan";
 import AddResult from "./AddResult";
-import CheckPlan from "./CheckPlan";
-
+import Calendar from "./Calendar";
 
 
 
@@ -97,7 +96,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    
+    //AsyncStorage.clear();
     const {toPlans , loaded , toResults} = this.state;
     
     var d = new Date() ;
@@ -136,10 +135,11 @@ export default class App extends React.Component {
       )
     }else{
       return (
-          <CheckPlan
-          _toPlans={toPlans}
+          <Calendar
+          _curPlans={toPlans}
           _toResults={toResults}
-          />
+          _savePlan={this._savePlan}
+        />
       );
     }
   }

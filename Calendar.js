@@ -4,26 +4,68 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  TextInput,
+  Dimensions
 } from 'react-native';
-import CalendarPicker from 'react-native-calendar-picker';
+
 import PropTypes from "prop-types";
 import moment ,  { Moment as MomentTypes }  from "moment"; 
 
+const { height,width} = Dimensions.get("window");
 
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      today : moment()
+      today : moment(),
+      planUpd : false,
+      plan:''
+      
     };
   }
   static propTypes = {
     _toResults: PropTypes.object.isRequired , 
-    _curPlans: PropTypes.string.isRequired
+    _curPlans: PropTypes.string.isRequired,
+    _savePlan: PropTypes.func.isRequired
+  }
+
+  componentDidMount=()=>{
+    const { _curPlans } = this.props;
+    this.setState({
+      plan : _curPlans 
+    });
+
+  }
+  _controllInput=text=>{
+    this.setState({
+      plan:text
+    })
+  }
+  _finishEditing=(event)=>{
+    event.stopPropagation;
+    const {_savePlan } = this.props;
+    const {plan} = this.state;
+    _savePlan(plan);
+    this.setState({
+      planUpd:false,
+    })
   }
   _changeDate(current){
-    this.setState({today:current})
+    const {_toResults , _curPlans } = this.props;
+    
+    let _toPlans = '';
+
+    //날짜 변경시
+    if( _toResults.hasOwnProperty( current.clone().format('YYYY-MM-DD')  )){
+      _toPlans = _toResults[ current.clone().format('YYYY-MM-DD') ].toPlans;
+    }else{
+      _toPlans = _curPlans;
+    }
+    this.setState({
+      today:current,
+      plan:_toPlans
+    })
   }
   _generate(today , _toResults){
         
@@ -42,6 +84,7 @@ export default class Calendar extends Component {
                 if( _toResults.hasOwnProperty( current.format('YYYY-MM-DD') )  ){
                   imgStatus = _toResults[ current.format('YYYY-MM-DD') ].result ;
                 };
+                
                 return (
                   <TouchableOpacity style={styles.box} onPress={()=> 
                     this._changeDate(current)
@@ -99,22 +142,40 @@ export default class Calendar extends Component {
     
   render() {
 
-    const {_toResults , _curPlans} = this.props;
-    const {today} = this.state;
-    
-    let _toPlans = '' ; 
-    
-    if( _toResults.hasOwnProperty( today.clone().format('YYYY-MM-DD')  )){
-      _toPlans = _toResults[ today.clone().format('YYYY-MM-DD') ].toPlans;
-    };
-    if( _toPlans === '' ){
-      _toPlans = _curPlans;
-    };
+    const {_toResults  } = this.props;
+    const {today , planUpd ,  plan  } = this.state;
     
     return (
       <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}>{_toPlans}</Text>
+                  {!planUpd ? (
+                    <TouchableOpacity onPress={()=> this.setState({ planUpd:true })} >
+                        <Text style={styles.title}>{plan}</Text> 
+                    </TouchableOpacity>
+                  ):(
+                    <View style={styles.editBox}>
+                      <TextInput 
+                        style={[
+                            styles.editTitle,
+                            styles.input
+                          ]}   
+                        value={plan}
+                        multiline={true}
+                        onChangeText={this._controllInput}
+                        returnKeyType={"done"}
+                        underlineColorAndroid={"transparent"}
+                      />
+                      <TouchableOpacity 
+                        onPressOut={this._finishEditing}
+                        style={styles.actionContainer}
+                      >
+                      <Text style={styles.actionBtn}>SAVE</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                    
+            
+            
           </View>
           <View style={styles.body}>
               
@@ -125,7 +186,7 @@ export default class Calendar extends Component {
                     })} >
                     <View style={styles.lc_}><Text>👈👈👈</Text></View>
                   </TouchableOpacity>
-                  <View style={styles.main_}><Text style={styles.Title}>{today.format('MMMM YYYY')}</Text></View>
+                  <View style={styles.main_}><Text style={styles.calTitle}>{today.format('MMMM YYYY')}</Text></View>
                   <TouchableOpacity style={styles.sub_} onPress={()=> this.setState({
                       today:today.clone().add(1, 'month')
                     })} >
@@ -133,13 +194,13 @@ export default class Calendar extends Component {
                   </TouchableOpacity>
               </View>
               <View style={styles.row}>
-                  <View style={styles.box}><Text style={styles.sun}>일</Text></View>
-                  <View style={styles.box}><Text>월</Text></View>
-                  <View style={styles.box}><Text>화</Text></View>
-                  <View style={styles.box}><Text>수</Text></View>
-                  <View style={styles.box}><Text>목</Text></View>
-                  <View style={styles.box}><Text>금</Text></View>
-                  <View style={styles.box}><Text style={styles.sat}>토</Text></View>
+                  <View style={styles.box}><Text style={styles.sun}>Sun</Text></View>
+                  <View style={styles.box}><Text>MON</Text></View>
+                  <View style={styles.box}><Text>THU</Text></View>
+                  <View style={styles.box}><Text>WED</Text></View>
+                  <View style={styles.box}><Text>THU</Text></View>
+                  <View style={styles.box}><Text>FRI</Text></View>
+                  <View style={styles.box}><Text style={styles.sat}>SAT</Text></View>
               </View>
               {this._generate(today , _toResults )}
             </View>
@@ -175,7 +236,6 @@ const styles = StyleSheet.create({
     fontSize:30,
     fontWeight : "600",
     marginTop:50,
-    fontWeight:"200",
     marginBottom:30,
   },
   dumy:{
@@ -222,7 +282,42 @@ const styles = StyleSheet.create({
   sat:{
      color:'blue'
   },
-  Title:{
+  calTitle:{
     color:'gray'
+  },
+  completedText:{
+    color: "#bbb",
+    textDecorationLine:"line-through"
+  },
+  unCompletedText:{
+    color: "#353839"
+  },
+  input:{
+    width:width/2,
+    marginVertical:15,
+    paddingBottom:5
+  },
+  text:{
+    fontWeight:"600",
+    fontSize:20,
+    marginVertical:20
+  },
+  editBox:{
+    flexDirection:"row",
+    alignItems:"center",
+    width:width/2,
+    justifyContent:'center'
+  },
+  editTitle:{
+    color:"white",
+    fontWeight : "600",
+    marginTop:50,
+    marginBottom:30,   
+    fontSize:20,
+  },
+  actionContainer:{
+    marginTop:50,
+    marginBottom:30,   
   }
+  
 });
