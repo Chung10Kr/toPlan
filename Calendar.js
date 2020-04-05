@@ -8,9 +8,10 @@ import {
   TextInput,
   Dimensions
 } from 'react-native';
-
+import uuidv1 from "uuid/v1";
 import PropTypes from "prop-types";
 import moment ,  { Moment as MomentTypes }  from "moment"; 
+import ConfirmationAlert from './ConfirmationAlert';
 
 const { height,width} = Dimensions.get("window");
 
@@ -19,9 +20,9 @@ export default class Calendar extends Component {
     super(props);
     this.state = {
       today : moment(),
+      alertVisible: false,
       planUpd : false,
       plan:''
-      
     };
   }
   static propTypes = {
@@ -31,12 +32,25 @@ export default class Calendar extends Component {
   }
 
   componentDidMount=()=>{
-    const { _curPlans } = this.props;
-    this.setState({
-      plan : _curPlans 
-    });
+    
+    const { _curPlans , _toResults } = this.props;
 
-  }
+    const td = moment();
+    let alramYn = false;
+    if( !_toResults.hasOwnProperty( td.clone().format('YYYY-MM-DD')  )){
+      alramYn=true;
+    };
+    
+    this.setState({
+      plan : _curPlans ,
+      alertVisible : alramYn
+    });
+  };
+  toggleAlert=() => {
+    this.setState({
+      alertVisible : false
+    });
+  };
   _controllInput=text=>{
     this.setState({
       plan:text
@@ -75,8 +89,9 @@ export default class Calendar extends Component {
     let calendar = [];
     
       for (let week = startWeek; week <= endWeek; week++) {
+        
         calendar.push(
-          <View style={styles.row} key={week} >
+          <View style={styles.row} key={uuidv1()} >
             {
               Array(7).fill(0).map((n, i) => {
                 let current = today.clone().week(week).startOf('week').add(n + i, 'day')
@@ -86,10 +101,10 @@ export default class Calendar extends Component {
                 };
                 
                 return (
-                  <TouchableOpacity style={styles.box} onPress={()=> 
+                  <TouchableOpacity key={uuidv1()} style={styles.box} onPress={()=> 
                     this._changeDate(current)
                   } >
-                    <View key={ week+'-'+i} >
+                    <View key={uuidv1()} >
                       {this._getCal( i , current , imgStatus)}
                     </View>
                   </TouchableOpacity>
@@ -143,10 +158,25 @@ export default class Calendar extends Component {
   render() {
 
     const {_toResults  } = this.props;
-    const {today , planUpd ,  plan  } = this.state;
+    const {today , planUpd ,  plan , alertVisible  } = this.state;
     
     return (
+
+      
+
       <View style={styles.container}>
+          <ConfirmationAlert
+          title="오늘의 목표 결과는?"
+          message="9시 이후에 체크해주세요"
+          visible={alertVisible}
+          buttons={[
+            {
+              text: '확인',
+              onPress: this.toggleAlert
+            }
+          ]}
+        />
+
           <View style={styles.header}>
                   {!planUpd ? (
                     <TouchableOpacity onPress={()=> this.setState({ planUpd:true })} >

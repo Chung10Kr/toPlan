@@ -11,7 +11,9 @@ import {
    ,AsyncStorage
   } from 'react-native';
 import { render } from 'react-dom';
-import { AppLoading } from "expo"
+import { AppLoading} from "expo"
+
+
 import uuidv1 from "uuid/v1";
 import moment ,  { Moment as MomentTypes }  from "moment"; 
 
@@ -55,7 +57,6 @@ export default class App extends React.Component {
   _savePlan = (newPlans) =>{
     this.setState({toPlans:newPlans});
     const savePlans = AsyncStorage.setItem("toPlans",JSON.stringify(newPlans));
-    
   };
 
  _addToResults=(newResult)=>{
@@ -94,9 +95,19 @@ export default class App extends React.Component {
     const saveResults = AsyncStorage.setItem("toResults",JSON.stringify(newResult));
     
   }
+  reverseObj=(obj)=>{
+      let newObj = {}
+      Object.keys(obj)
+        .sort()
+        .reverse()
+        .forEach((key) => {
+          newObj[key] = obj[key]
+        })
+      return newObj;
+  };
 
   render() {
-    //AsyncStorage.clear();
+    
     const {toPlans , loaded , toResults} = this.state;
     
     var d = new Date() ;
@@ -106,12 +117,16 @@ export default class App extends React.Component {
     const today = this._getCurTime()
     
     //9시가 넘고 같은 날짜가 존재 할떄
-    if(_t >= 20){
-      Object.values(toResults).map(result=>{
-        if( today.toString()  ==  moment(result.createedAt).format('YYYY-MM-DD').toString()  ){
-          todayCheck=true;
-        };
-      });
+    const newObj = this.reverseObj(toResults);
+    if(_t >= 21){
+      
+      for( var key in newObj){
+          if( today.toString()  ==  moment(newObj[key].createedAt).format('YYYY-MM-DD').toString()  ){
+            todayCheck=true;
+            break;
+          };
+      };
+      
     }else{
       todayCheck=true;
     };
