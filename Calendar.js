@@ -214,13 +214,13 @@ export default class Calendar extends Component {
                   <TouchableOpacity style={styles.sub_} onPress={()=> this.setState({
                       today:today.clone().subtract(1, 'month')
                     })} >
-                    <View style={styles.lc_}><Text>👈👈👈</Text></View>
+                    <View style={styles.lc_}><Text>◀️</Text></View>
                   </TouchableOpacity>
                   <View style={styles.main_}><Text style={styles.calTitle}>{today.format('MMMM YYYY')}</Text></View>
                   <TouchableOpacity style={styles.sub_} onPress={()=> this.setState({
                       today:today.clone().add(1, 'month')
                     })} >
-                    <View style={styles.rc_}><Text>👉👉👉</Text></View>  
+                    <View style={styles.rc_}><Text>▶️</Text></View>  
                   </TouchableOpacity>
               </View>
               <View style={styles.row}>

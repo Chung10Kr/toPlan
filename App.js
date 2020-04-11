@@ -22,6 +22,8 @@ import AddResult from "./AddResult";
 import Calendar from "./Calendar";
 
 
+//https://expo.io/dashboard/leechungryeol/builds/751602c5-2f6d-429b-ab5d-cf39c8ef3daa
+
 
 export default class App extends React.Component {
   state = {
