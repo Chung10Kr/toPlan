@@ -5,6 +5,7 @@ import {
    ,View
    ,TouchableOpacity
    ,Dimensions
+   ,ImageBackground
    ,TextInput
    ,StatusBar
    ,Platform
@@ -69,30 +70,35 @@ export default class addResult extends React.Component {
             onPress={this._click1}>
             
               <Text style={styles.actionText}> Perfect </Text>
+              <ImageBackground source={require('./assets/status1.png')} style={{ width: "80%", height: "80%" }} resizeMode="cover" ></ImageBackground>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.btnView}
             onPress={this._click2}>
               <Text style={styles.actionText}> Good </Text>
+              <ImageBackground source={require('./assets/status1.png')} style={{ width: "80%", height: "80%" }} resizeMode="cover" ></ImageBackground>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.btnView}
             onPress={this._click3}>
               <Text style={styles.actionText}> So So </Text>
+              <ImageBackground source={require('./assets/status1.png')} style={{ width: "80%", height: "80%" }} resizeMode="cover" ></ImageBackground>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.btnView}
             onPress={this._click4}>
               <Text style={styles.actionText}> Not bad </Text>
+              <ImageBackground source={require('./assets/status1.png')} style={{ width: "80%", height: "80%" }} resizeMode="cover" ></ImageBackground>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.btnView}
             onPress={this._click5}>
               <Text style={styles.actionText}> Bad </Text>
+              <ImageBackground source={require('./assets/status1.png')} style={{ width: "80%", height: "80%" }} resizeMode="cover" ></ImageBackground>
           </TouchableOpacity>
 
       </View>

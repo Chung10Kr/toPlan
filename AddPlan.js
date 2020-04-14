@@ -47,7 +47,7 @@ export default class addPurpose extends React.Component {
     return(
       <View style={styles.container}>
           <StatusBar barStyle="light-content"/>
-          <Text style={styles.title}>What are your plans?</Text>
+          <Text style={styles.title}>Daily Check Plan</Text>
           <View style={styles.card}>
             <TextInput 
               style={styles.input}
@@ -57,7 +57,7 @@ export default class addPurpose extends React.Component {
           <TouchableOpacity 
             style={styles.btnView}
             onPress={this._clickBtn}>
-              <Text style={styles.actionText}> Cheer up! every day </Text>
+              <Text style={styles.actionText}> Cheer up! </Text>
           </TouchableOpacity>
 
       </View>
