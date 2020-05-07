@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   TextInput,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native';
 import uuidv1 from "uuid/v1";
 import PropTypes from "prop-types";
@@ -104,7 +105,7 @@ export default class Calendar extends Component {
                   <TouchableOpacity key={uuidv1()} style={styles.box} onPress={()=> 
                     this._changeDate(current)
                   } >
-                    <View key={uuidv1()} >
+                    <View key={uuidv1()} style={styles.imgView} >
                       {this._getCal( i , current , imgStatus)}
                     </View>
                   </TouchableOpacity>
@@ -117,7 +118,7 @@ export default class Calendar extends Component {
       return calendar;
     };
     _getCal( i , current , imgStatus ){
-      let iconPath = './assets/'+imgStatus+'.png';
+      
       if(imgStatus != null){
         var icon ; 
         if( imgStatus == 1){
@@ -133,23 +134,20 @@ export default class Calendar extends Component {
         };
                
         return(
-          <ImageBackground
-            style={{ width: "80%", height: "80%" }}
-            source={icon}
-            resizeMode="cover"
-            >
-          </ImageBackground>
+          
+           <ImageBackground
+              style={styles.backImg}
+              source={icon}
+              resizeMode="cover"
+             >
+             <Text style={[(i === 0) && { color:'red' },(i === 6) && { color:'blue' } , styles.dateTxt]}>{current.format('D')}</Text>
+           </ImageBackground>
+          
+          
         );
       }else{
         return (
-          <Text
-            style={[
-              (i === 0) && { color:'red' },
-              (i === 6) && { color:'blue' },
-            ]}
-            >
-            {current.format('D')}
-          </Text>
+          <Text style={[ (i === 0) && { color:'red' }, (i === 6) && { color:'blue' } ]} > {current.format('D')} </Text>
         );
       };
     };
@@ -166,16 +164,16 @@ export default class Calendar extends Component {
 
       <View style={styles.container}>
           <ConfirmationAlert
-          title="오늘의 목표 결과는?"
-          message="9시 이후에 체크해주세요"
-          visible={alertVisible}
-          buttons={[
-            {
-              text: '확인',
-              onPress: this.toggleAlert
-            }
-          ]}
-        />
+            title="오늘의 목표 결과는?"
+            message="9시 이후에 체크해주세요"
+            visible={alertVisible}
+            buttons={[
+              {
+                text: '확인',
+                onPress: this.toggleAlert
+              }
+            ]}
+          />
 
           <View style={styles.header}>
                   {!planUpd ? (
@@ -291,7 +289,7 @@ const styles = StyleSheet.create({
   },
   box:{
     width:'14%',
-    alignItems:'center'
+    alignItems:'center',
   },
   main_:{
     width:'40%',
@@ -348,7 +346,20 @@ const styles = StyleSheet.create({
   actionContainer:{
     marginTop:50,
     marginBottom:30,   
-  }
-  
+  },
+  backImg:{
+    width:'95%',
+    height:'95%',
+    alignItems:"center",
+  },
+  imgView:{
+    flex:1,
+    width:'100%',
+    height:'100%',
+    alignItems:"center"
+  },
+  dateTxt:{
+    
+  } 
   
 });
